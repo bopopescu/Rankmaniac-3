@@ -5,6 +5,7 @@ import sys
 N = 1000
 alpha = 0.85
 
+
 def parseInput(line):
     cmps = line.split("\t")
     arr = cmps[1].split(",")
@@ -14,8 +15,10 @@ def parseInput(line):
     numLinks = int(arr[2])
     return nodeID, parentID, rank, numLinks
 
+
 def printOutput(nodeID, newRank):
-    sys.stdout.write("FinalRank:" + str(newRank) + " " + nodeID)
+    # print nodeID
+    sys.stdout.write("FinalRank:" + str(newRank) + " " + str(nodeID) + "\n")
 
 def computeRank(nodeID, values):
     summation = 0
@@ -30,9 +33,11 @@ values = []
 
 for line in sys.stdin:
     nodeID, parentID, rank, numLinks = parseInput(line)
-    if nodeID != lastKey and lastKey != -1:
-        (nodeID, newRank) = computeRank(lastKey, values)
-        printOutput(nodeID, newRank)
+    if lastKey == -1:
+        lastKey = nodeID
+    if nodeID != lastKey:
+        (oldNodeID, newRank) = computeRank(lastKey, values)
+        printOutput(oldNodeID, newRank)
         lastKey = nodeID
         values = []
     values.append((parentID, rank, numLinks))
