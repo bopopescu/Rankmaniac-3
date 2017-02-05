@@ -1,10 +1,9 @@
 #!/usr/bin/env python
 
 import sys
+import json
 
-#
-# This program simply represents the identity function.
-#
+maxNodeID = 0
 
 for line in sys.stdin:
     cmps = line.split("\t")
@@ -14,15 +13,29 @@ for line in sys.stdin:
     prevRank = float(arr[1])
     outLinks = map(int, arr[2:])
 
-    # print "CurrRank: %d" %currRank
-    # print "OutLinks: " + str(len(outLinks))
-    # print "nodeID: %d" %nodeID
-    # print "arr: " + str(arr)
+    maxNodeID = max(maxNodeID, nodeID)
 
-    rankString = str(currRank)
-    linkString = str(len(outLinks))
-    parentIDString = str(nodeID)
+    linkValue = json.dumps({
+        "data": "inLink",
+        "rank": currRank,
+        "numOut": len(outLinks)
+    })
+
+    metaValue = json.dumps({
+        "data": "meta",
+        "outLinks": outLinks,
+        "currRank": currRank
+    })
 
     for child in outLinks:
-        outLine = str(child) + "\t" + parentIDString + "," + rankString + "," + linkString + "\n"
-        sys.stdout.write(outLine)
+        sys.stdout.write(str(child) + "\t" + linkValue + "\n")
+
+    sys.stdout.write(str(nodeID) + "\t" + metaValue + "\n")
+
+maxNodeValue = json.dumps({
+    "data": "maxNodeID",
+    "maxNodeID": maxNodeID
+})
+
+for i in range(maxNodeID + 1):
+    sys.stdout.write(str(i) + "\t" + maxNodeValue + "\n")

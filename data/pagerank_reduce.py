@@ -1,43 +1,46 @@
 #!/usr/bin/env python
 
 import sys
+import json
 
-N = 1000
 alpha = 0.85
 
-
 def parseInput(line):
-    cmps = line.split("\t")
-    arr = cmps[1].split(",")
-    nodeID = int(cmps[0])
-    parentID = int(arr[0])
-    rank = float(arr[1])
-    numLinks = int(arr[2])
-    return nodeID, parentID, rank, numLinks
-
+    key, value = line.split("\t", 1)
+    key = int(key)
+    value = json.loads(value)
+    return key, value
 
 def printOutput(nodeID, newRank):
-    # print nodeID
     sys.stdout.write("FinalRank:" + str(newRank) + " " + str(nodeID) + "\n")
 
 def computeRank(nodeID, values):
+    N = 0
+    outlinks = []
+    prevRank = 0.0
     summation = 0
-    for (_, rank, numLinks) in values:
-        summation += rank / numLinks
+    for v in values:
+        if v["data"] == "maxNodeID":
+            N = max(N, v["maxNodeID"])
+        elif v["data"] == "meta":
+            outlinks = v["outLinks"]
+            prevRank = v["currRank"]
+        elif v["data"] == "inLink":
+            summation += v["rank"] / v["numOut"]
     newRank = (1 - alpha) / N + alpha * summation
-    return nodeID, newRank
+    sys.stdout.write("NodeId:" + str(nodeID) + "\t" + str(newRank) + "," +
+                     str(prevRank) + "," + ",".join(map(str, outlinks)) + "\n")
 
-# nodeid\t parentid,rank,numberoflinks
 lastKey = -1
 values = []
 
 for line in sys.stdin:
-    nodeID, parentID, rank, numLinks = parseInput(line)
+    nodeID, value = parseInput(line)
     if lastKey == -1:
         lastKey = nodeID
     if nodeID != lastKey:
-        (oldNodeID, newRank) = computeRank(lastKey, values)
-        printOutput(oldNodeID, newRank)
+        computeRank(lastKey, values)
         lastKey = nodeID
         values = []
-    values.append((parentID, rank, numLinks))
+    values.append(value)
+computeRank(lastKey, values)
