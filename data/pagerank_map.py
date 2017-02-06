@@ -5,6 +5,10 @@ import json
 
 maxNodeID = 0
 
+def putMessage(messageKey, dataType, data):
+    data["data"] = dataType
+    sys.stdout.write(str(messageKey) + "\t" + json.dumps(data) + "\n")
+
 for line in sys.stdin:
     cmps = line.split("\t")
     arr = cmps[1].split(",")
@@ -15,27 +19,16 @@ for line in sys.stdin:
 
     maxNodeID = max(maxNodeID, nodeID)
 
-    linkValue = json.dumps({
-        "data": "inLink",
-        "rank": currRank,
-        "numOut": len(outLinks)
-    })
 
-    metaValue = json.dumps({
-        "data": "meta",
-        "outLinks": outLinks,
-        "currRank": currRank
-    })
 
     for child in outLinks:
-        sys.stdout.write(str(child) + "\t" + linkValue + "\n")
+        putMessage(child, "inLink", {"rank": currRank, "numOut": len(outLinks)})
+    if len(outLinks) == 0:
+        putMessage(nodeID, "inLink", {"rank": currRank, "numOut": 1})
 
-    sys.stdout.write(str(nodeID) + "\t" + metaValue + "\n")
+    putMessage(nodeID, "meta", {"outLinks": outLinks, "currRank": currRank})
 
-maxNodeValue = json.dumps({
-    "data": "maxNodeID",
-    "maxNodeID": maxNodeID
-})
+
 
 for i in range(maxNodeID + 1):
-    sys.stdout.write(str(i) + "\t" + maxNodeValue + "\n")
+    putMessage(i, "maxNodeID", {"maxNodeID": maxNodeID})
