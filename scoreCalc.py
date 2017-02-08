@@ -1,5 +1,6 @@
 import math
 import numpy
+import sys
 
 def scoreCalculator(outputFile, answerFile):
 
@@ -36,4 +37,12 @@ def scoreCalculator(outputFile, answerFile):
 		
 	penaltySeconds = error * 30
 
-	return (error, penaltySeconds)
+	print error
+	print penaltySeconds
+
+def main():
+	scoreCalculator(str(sys.argv[1]), str(sys.argv[2]))
+
+if __name__== "__main__":
+	main()
+	
