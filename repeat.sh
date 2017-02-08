@@ -7,5 +7,5 @@ for ((i=2;i <= $1;i++))
 cmd+=" > data/output.txt"
 eval $cmd
 
-cmd2="python scoreCalc.py data/output.txt"
+cmd2="python scoreCalc.py data/output.txt data/real_output.txt"
 eval $cmd2
