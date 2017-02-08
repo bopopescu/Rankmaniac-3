@@ -17,4 +17,4 @@ for line in sys.stdin:
 if done:
     heap = heapq.merge(*heaps)
     for (rank, node) in heapq.nlargest(20, heap):
-        sys.stdout.write("FinalRank:" + str(rank) + " " + str(node) + "\n")
+        sys.stdout.write("FinalRank:" + str(rank) + "\t" + str(node) + "\n")
