@@ -10,6 +10,8 @@ def putMessage(messageKey, dataType, data):
     sys.stdout.write(str(messageKey) + "\t" + json.dumps(data) + "\n")
 
 for line in sys.stdin:
+    if line.startswith("FinalRank"):
+        raise Exception("DONE")
     cmps = line.split("\t")
     arr = cmps[1].split(",")
     nodeID = int(cmps[0].split(":")[1])

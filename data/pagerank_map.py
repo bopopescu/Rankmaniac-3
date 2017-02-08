@@ -22,15 +22,9 @@ for line in sys.stdin:
     maxNodeID = max(maxNodeID, nodeID)
 
 
-
     for child in outLinks:
         putMessage(child, "inLink", {"rank": currRank, "numOut": len(outLinks)})
     if len(outLinks) == 0:
         putMessage(nodeID, "inLink", {"rank": currRank, "numOut": 1})
 
     putMessage(nodeID, "meta", {"outLinks": outLinks, "currRank": currRank})
-
-
-
-for i in range(maxNodeID + 1):
-    putMessage(i, "maxNodeID", {"maxNodeID": maxNodeID})

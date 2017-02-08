@@ -15,19 +15,16 @@ def printOutput(nodeID, newRank):
     sys.stdout.write("FinalRank:" + str(newRank) + " " + str(nodeID) + "\n")
 
 def computeRank(nodeID, values):
-    N = 0
     outLinks = []
     prevRank = 0.0
     summation = 0
     for v in values:
-        if v["data"] == "maxNodeID":
-            N = max(N, v["maxNodeID"])
-        elif v["data"] == "meta":
+        if v["data"] == "meta":
             outLinks = v["outLinks"]
             prevRank = v["currRank"]
         elif v["data"] == "inLink":
             summation += v["rank"] / v["numOut"]
-    newRank = (1 - alpha) / N + alpha * summation
+    newRank = (1 - alpha) + alpha * summation
     outLinksStr = ""
     if len(outLinks) > 0:
         outLinksStr = "," + ",".join(map(str, outLinks))
