@@ -4,7 +4,7 @@ import heapq
 import json
 import sys
 
-convergenceDiff = 0.004
+convergenceDiff = 0.01
 
 N = 0
 heap = []
