@@ -376,7 +376,7 @@ class Rankmaniac:
 
         if not self.job_id:
             raise RankmaniacError('No job is running.')
-            
+
         cinfo = self._emr_conn.describe_cluster(self.job_id)
         sinfo1 = self._emr_conn.list_steps(self.job_id)
         steps = sinfo1.steps
@@ -400,7 +400,7 @@ class Rankmaniac:
         if jobdesc is None:
             jobdesc = self.describe()
         steps = jobdesc["steps"]
-    
+
         cnt = 0
         for i in range(len(steps)):
             step = steps[i]
