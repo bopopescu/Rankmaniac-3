@@ -4,6 +4,8 @@ import heapq
 import json
 import sys
 
+convergenceDiff = 0.01
+
 heap = []
 lines = []
 converged = True
@@ -17,7 +19,7 @@ for line in sys.stdin:
     nodeID = int(cmps[0].split(":")[1])
     currRank = float(cmps[1].split(",")[0])
     prevRank = float(cmps[1].split(",")[1])
-    if abs(currRank - prevRank) > 0.1:
+    if abs(currRank - prevRank) > convergenceDiff:
         converged = False
 
     heapq.heappushpop(heap, (currRank, nodeID))
