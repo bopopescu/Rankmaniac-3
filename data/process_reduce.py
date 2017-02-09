@@ -4,29 +4,40 @@ import heapq
 import json
 import sys
 
-prevNode = -1
-mode = "normal"
+heapId = -1
+iterId = -2
 
 def parseInput(line):
     key, value = line.split("\t", 1)
-    node = key.split(":")[1]
-    return node, value
+    key = int(key)
+    value = json.loads(value)
+    return key, value
 
-def processNode(node, values):
-    if len(values) == 1 and node != "R":
-        sys.stdout.write("NodeId:" + node + "\t" + values[0])
-    elif node == "R":
-        heap = json.loads(values[0])
+def printNode(nodeId, value):
+    currRank = value["currRank"]
+    prevRank = value["prevRank"]
+    outLinks = value["outLinks"]
+    outlinkString = reduce(lambda x, y: x + y, map(lambda link: "," + str(link), outLinks), "")
+    sys.stdout.write("NodeId:" + str(nodeId) + "\t" + str(currRank) + "," + str(prevRank) + outlinkString + "\n")
+
+def processNode(nodeId, values):
+    if len(values) == 1 and nodeId >= 0:
+        printNode(nodeId, values[0])
+    elif nodeId == heapId:
+        heap = values[0]["heap"]
         for (rank, node) in heapq.nlargest(20, heap):
             sys.stdout.write("FinalRank:" + str(rank) + "\t" + str(node) + "\n")
+    elif nodeId == iterId:
+        printNode(nodeId, values[0])
 
 
-lastKey = -1
+
+lastKey = None
 values = []
 
 for line in sys.stdin:
     node, value = parseInput(line)
-    if lastKey == -1:
+    if lastKey is None:
         lastKey = node
     if node != lastKey:
         processNode(lastKey, values)

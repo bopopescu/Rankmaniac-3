@@ -4,6 +4,7 @@ import sys
 import json
 
 alpha = 0.85
+iterId = -2
 
 def parseInput(line):
     key, value = line.split("\t", 1)
@@ -11,36 +12,35 @@ def parseInput(line):
     value = json.loads(value)
     return key, value
 
-def printOutput(nodeID, newRank):
-    sys.stdout.write("FinalRank:" + str(newRank) + " " + str(nodeID) + "\n")
+def printOutput(messageKey, data):
+    sys.stdout.write(str(messageKey) + "\t" + json.dumps(data) + "\n")
 
-def computeRank(nodeID, values):
+def computeRank(nodeId, values):
     outLinks = []
     prevRank = 0.0
     summation = 0
     for v in values:
-        if v["data"] == "meta":
+        if v["dataType"] == "meta":
             outLinks = v["outLinks"]
             prevRank = v["currRank"]
-        elif v["data"] == "inLink":
-            summation += v["rank"] / v["numOut"]
-    newRank = (1 - alpha) + alpha * summation
-    outLinksStr = ""
-    if len(outLinks) > 0:
-        outLinksStr = "," + ",".join(map(str, outLinks))
-    sys.stdout.write("NodeId:" + str(nodeID) + "\t" + str(newRank) + "," +
-                     str(prevRank) + outLinksStr + "\n")
+        elif v["dataType"] == "inLink":
+            summation += v["parentRank"] / v["parentOutCount"]
+    if nodeId == iterId:
+        currRank = v["currRank"]
+    else:
+        currRank = (1 - alpha) + alpha * summation
+    printOutput(nodeId, {"prevRank": prevRank, "currRank": currRank, "outLinks": outLinks})
 
-lastKey = -1
+lastKey = None
 values = []
 
 for line in sys.stdin:
-    nodeID, value = parseInput(line)
-    if lastKey == -1:
-        lastKey = nodeID
-    if nodeID != lastKey:
+    nodeId, value = parseInput(line)
+    if lastKey is None:
+        lastKey = nodeId
+    if nodeId != lastKey:
         computeRank(lastKey, values)
-        lastKey = nodeID
+        lastKey = nodeId
         values = []
     values.append(value)
 computeRank(lastKey, values)

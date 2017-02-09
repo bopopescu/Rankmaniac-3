@@ -3,8 +3,7 @@
 import sys
 import json
 
-def putMessage(messageKey, dataType, data):
-    data["data"] = dataType
+def printOutput(messageKey, data):
     sys.stdout.write(str(messageKey) + "\t" + json.dumps(data) + "\n")
 
 for line in sys.stdin:
@@ -18,8 +17,8 @@ for line in sys.stdin:
     outLinks = map(int, arr[2:])
 
     for child in outLinks:
-        putMessage(child, "inLink", {"rank": currRank, "numOut": len(outLinks)})
+        printOutput(child, {"dataType": "inLink", "parentRank": currRank, "parentOutCount": len(outLinks)})
     if len(outLinks) == 0:
-        putMessage(nodeID, "inLink", {"rank": currRank, "numOut": 1})
+        printOutput(nodeID, {"dataType": "inLink", "parentRank": currRank, "parentOutCount": 1})
 
-    putMessage(nodeID, "meta", {"outLinks": outLinks, "currRank": currRank})
+    printOutput(nodeID, {"dataType": "meta", "outLinks": outLinks, "currRank": currRank})
