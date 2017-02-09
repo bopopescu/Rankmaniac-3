@@ -3,8 +3,6 @@
 import sys
 import json
 
-maxNodeID = 0
-
 def putMessage(messageKey, dataType, data):
     data["data"] = dataType
     sys.stdout.write(str(messageKey) + "\t" + json.dumps(data) + "\n")
@@ -18,8 +16,6 @@ for line in sys.stdin:
     currRank = float(arr[0])
     prevRank = float(arr[1])
     outLinks = map(int, arr[2:])
-
-    maxNodeID = max(maxNodeID, nodeID)
 
     for child in outLinks:
         putMessage(child, "inLink", {"rank": currRank, "numOut": len(outLinks)})

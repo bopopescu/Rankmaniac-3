@@ -21,7 +21,6 @@ for line in sys.stdin:
 
     maxNodeID = max(maxNodeID, nodeID)
 
-
     for child in outLinks:
         putMessage(child, "inLink", {"rank": currRank, "numOut": len(outLinks)})
     if len(outLinks) == 0:
