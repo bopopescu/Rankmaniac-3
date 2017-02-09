@@ -4,19 +4,19 @@ import sys
 import json
 
 def printOutput(messageKey, data):
-    sys.stdout.write(str(messageKey) + "\t" + json.dumps(data) + "\n")
+    sys.stdout.write(messageKey + "\t" + json.dumps(data) + "\n")
 
 for line in sys.stdin:
     cmps = line.split("\t")
-    arr = cmps[1].split(",")
-    nodeID = int(cmps[0].split(":")[1])
+    nodeId = cmps[0].split(":")[1]
+    arr = cmps[1].split("\n")[0].split(",")
     currRank = float(arr[0])
-    prevRank = float(arr[1])
-    outLinks = map(int, arr[2:])
+    outLinks = arr[2:]
 
-    for child in outLinks:
-        printOutput(child, {"dataType": "inLink", "parentRank": currRank, "parentOutCount": len(outLinks)})
     if len(outLinks) == 0:
-        printOutput(nodeID, {"dataType": "inLink", "parentRank": currRank, "parentOutCount": 1})
+        printOutput(nodeId, {"dataType": "inLink", "parentRank": currRank, "parentOutCount": 1})
+    else:
+        for child in outLinks:
+            printOutput(child, {"dataType": "inLink", "parentRank": currRank, "parentOutCount": len(outLinks)})
 
-    printOutput(nodeID, {"dataType": "meta", "outLinks": outLinks, "currRank": currRank})
+    printOutput(nodeId, {"dataType": "meta", "outLinks": outLinks, "currRank": currRank})

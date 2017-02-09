@@ -14,15 +14,14 @@ N = 0
 heap = []
 converged = True
 
-heapId = -1
-iterId = -2
+heapId = "-1"
+iterId = "-2"
 
 def printOutput(messageKey, data):
-    sys.stdout.write(str(messageKey) + "\t" + json.dumps(data) + "\n")
+    sys.stdout.write(messageKey + "\t" + json.dumps(data) + "\n")
 
 def parseInput(line):
     key, value = line.split("\t", 1)
-    key = int(key)
     value = json.loads(value)
     return key, value["currRank"], value["prevRank"]
 
@@ -31,7 +30,7 @@ for i in range(20):
 
 for line in sys.stdin:
     nodeID, currRank, prevRank = parseInput(line)
-    if nodeID >= 0:
+    if nodeID != iterId:
         sys.stdout.write(line)
         N += 1
         if abs(currRank - prevRank) > convergenceDiff:
@@ -40,12 +39,9 @@ for line in sys.stdin:
     else:
         iteration = currRank
 
-
-
-
 if converged or iteration >= max_iter:
     for i in range(N):
-        printOutput(i, {})
+        printOutput(str(i), {})
     printOutput(heapId, {"heap": heap})
 else:
     printOutput(iterId, {"currRank": iteration + 1, "prevRank": iteration, "outLinks": []})

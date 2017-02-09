@@ -4,16 +4,15 @@ import sys
 import json
 
 alpha = 0.85
-iterId = -2
+iterId = "-2"
 
 def parseInput(line):
     key, value = line.split("\t", 1)
-    key = int(key)
     value = json.loads(value)
     return key, value
 
 def printOutput(messageKey, data):
-    sys.stdout.write(str(messageKey) + "\t" + json.dumps(data) + "\n")
+    sys.stdout.write(messageKey + "\t" + json.dumps(data) + "\n")
 
 def computeRank(nodeId, values):
     outLinks = []
