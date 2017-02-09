@@ -25,7 +25,6 @@ for line in sys.stdin:
 
     heapq.heappushpop(heap, (currRank, nodeID))
 
-    #sys.stdout.write(line)
 if converged:
     for i in range(N):
         sys.stdout.write("NodeId:" + str(i) + "\tCONVERGED\n")

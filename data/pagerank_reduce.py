@@ -11,13 +11,10 @@ def parseInput(line):
     value = json.loads(value)
     return key, value
 
-def printOutput(nodeID, newRank):
-    sys.stdout.write("FinalRank:" + str(newRank) + " " + str(nodeID) + "\n")
-
 def computeRank(nodeID, values):
     outLinks = []
     prevRank = 0.0
-    summation = 0
+    summation = 0.0
     for v in values:
         if v["data"] == "meta":
             outLinks = v["outLinks"]
