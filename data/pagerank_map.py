@@ -3,6 +3,8 @@
 import sys
 import json
 
+iterId = "-2"
+
 def printOutput(messageKey, data):
     sys.stdout.write(messageKey + "\t" + json.dumps(data) + "\n")
 
@@ -13,10 +15,11 @@ for line in sys.stdin:
     currRank = float(arr[0])
     outLinks = arr[2:]
 
-    if len(outLinks) == 0:
-        printOutput(nodeId, {"dataType": "inLink", "parentRank": currRank, "parentOutCount": 1})
-    else:
-        for child in outLinks:
-            printOutput(child, {"dataType": "inLink", "parentRank": currRank, "parentOutCount": len(outLinks)})
+    if nodeId != iterId:
+        if len(outLinks) == 0:
+            printOutput(nodeId, {"dataType": "inLink", "parentRank": currRank, "parentOutCount": 1})
+        else:
+            for child in outLinks:
+                printOutput(child, {"dataType": "inLink", "parentRank": currRank, "parentOutCount": len(outLinks)})
 
     printOutput(nodeId, {"dataType": "meta", "outLinks": outLinks, "currRank": currRank})

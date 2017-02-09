@@ -17,6 +17,7 @@ def printOutput(messageKey, data):
 def computeRank(nodeId, values):
     outLinks = []
     prevRank = 0.0
+    currRank = 0.0
     summation = 0
     for v in values:
         if v["dataType"] == "meta":
@@ -25,7 +26,7 @@ def computeRank(nodeId, values):
         elif v["dataType"] == "inLink":
             summation += v["parentRank"] / v["parentOutCount"]
     if nodeId == iterId:
-        currRank = v["currRank"]
+        currRank = values[0]["currRank"]
     else:
         currRank = (1 - alpha) + alpha * summation
     printOutput(nodeId, {"prevRank": prevRank, "currRank": currRank, "outLinks": outLinks})
