@@ -27,7 +27,7 @@ def processNode(nodeId, values):
     elif nodeId == heapId:
         heap = values[0]["heap"]
         for (rank, node) in heapq.nlargest(20, heap):
-            sys.stdout.write("FinalRank:" + str(rank) + "\t" + str(node) + "\n")
+            sys.stdout.write("FinalRank:" + str(rank) + "\t" + node + "\n")
     elif nodeId == iterId:
         printNode(nodeId, values[0])
 

@@ -11,7 +11,7 @@ def printOutput(messageKey, data):
 for line in sys.stdin:
     cmps = line.split("\t")
     nodeId = cmps[0].split(":")[1]
-    arr = cmps[1].split("\n")[0].split(",")
+    arr = cmps[1].replace("\n", "").split(",")
     currRank = float(arr[0])
     outLinks = arr[2:]
 

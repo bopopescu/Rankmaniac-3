@@ -26,7 +26,7 @@ def computeRank(nodeId, values):
         elif v["dataType"] == "inLink":
             summation += v["parentRank"] / v["parentOutCount"]
     if nodeId == iterId:
-        currRank = values[0]["currRank"]
+        currRank = prevRank
     else:
         currRank = (1 - alpha) + alpha * summation
     printOutput(nodeId, {"prevRank": prevRank, "currRank": currRank, "outLinks": outLinks})
