@@ -28,8 +28,8 @@ def printNode(nodeId, value):
 def printIter(iterator):
     sys.stdout.write("NodeId:" + iterId + "\t" + str(iterator) + "\n")
 
-def printEpsilon(epsilon):
-    sys.stdout.write("NodeId:" + epsilonId + "\t" + str(epsilon) + "\n")
+def printEpsilon(epsilon, num_converges):
+    sys.stdout.write("NodeId:" + epsilonId + "\t" + str(epsilon) + "," + str(num_converges) + "\n")
 
 def printTop20(heap):
     for (rank, node) in heapq.nlargest(20, heap):
@@ -47,7 +47,7 @@ for line in sys.stdin:
     if nodeId == iterId:
         printIter(value["iteration"])
     elif nodeId == epsilonId:
-        printEpsilon(value["epsilon"])
+        printEpsilon(value["epsilon"], value["num_converges"])
     elif nodeId == heapId:
         printTop20(value["heap"])
     else:

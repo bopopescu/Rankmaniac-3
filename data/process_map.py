@@ -4,10 +4,12 @@ import heapq
 import json
 import sys
 
-convergenceThresh = 3
+convergenceThresh = 2
+num_converges = 0
+needed_converges = 3
+prev_epsilon = -1
 
 iteration = 1
-prev_epsilon = -1
 
 max_iter = 50
 
@@ -40,6 +42,7 @@ for line in sys.stdin:
         iteration = value["iteration"] + 1
     elif nodeId == epsilonId:
         prev_epsilon = value["epsilon"]
+        num_converges = value["num_converges"]
     else:
         currRank = value["currRank"]
         prevRank = value["prevRank"]
@@ -48,10 +51,16 @@ for line in sys.stdin:
         heapq.heappushpop(heap, (currRank, nodeId))
 
 new_epsilon = getEpsilon(heap)
-if new_epsilon <= (prev_epsilon / convergenceThresh) or iteration >= max_iter:
+if new_epsilon <= (prev_epsilon / convergenceThresh):
+    num_converges += 1
+    new_epsilon = prev_epsilon
+else:
+    num_converges = 0
+
+if num_converges >= needed_converges or iteration >= max_iter:
     for i in range(N):
         printOutput(str(i), {"converged": True})
     printOutput(heapId, {"heap": heap})
 else:
     printOutput(iterId, {"iteration": iteration})
-    printOutput(epsilonId, {"epsilon": new_epsilon})
+    printOutput(epsilonId, {"epsilon": new_epsilon, "num_converges": num_converges})

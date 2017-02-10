@@ -19,7 +19,8 @@ for line in sys.stdin:
         printOutput(nodeId, {"iteration": iteration})
     elif nodeId == epsilonId:
         epsilon = float(arr[0])
-        printOutput(nodeId, {"epsilon": epsilon})
+        num_converges = int(arr[1])
+        printOutput(nodeId, {"epsilon": epsilon, "num_converges": num_converges})
     else:
         currRank = float(arr[0])
         outLinks = arr[2:]
