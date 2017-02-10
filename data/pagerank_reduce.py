@@ -5,6 +5,7 @@ import json
 
 alpha = 0.85
 iterId = "-2"
+epsilonId = "-3"
 
 def parseInput(line):
     key, value = line.split("\t", 1)
@@ -25,10 +26,7 @@ def computeRank(nodeId, values):
             prevRank = v["currRank"]
         elif v["dataType"] == "inLink":
             summation += v["parentRank"] / v["parentOutCount"]
-    if nodeId == iterId:
-        currRank = values[0]["currRank"]
-    else:
-        currRank = (1 - alpha) + alpha * summation
+    currRank = (1 - alpha) + alpha * summation
     printOutput(nodeId, {"prevRank": prevRank, "currRank": currRank, "outLinks": outLinks})
 
 lastKey = None
@@ -36,11 +34,15 @@ values = []
 
 for line in sys.stdin:
     nodeId, value = parseInput(line)
-    if lastKey is None:
-        lastKey = nodeId
-    if nodeId != lastKey:
-        computeRank(lastKey, values)
-        lastKey = nodeId
-        values = []
-    values.append(value)
-computeRank(lastKey, values)
+    if nodeId == iterId or nodeId == epsilonId:
+        sys.stdout.write(line)
+    else:
+        if lastKey is None:
+            lastKey = nodeId
+        if nodeId != lastKey:
+            computeRank(lastKey, values)
+            lastKey = nodeId
+            values = []
+        values.append(value)
+if lastKey is not None and lastKey != iterId and lastKey != epsilonId:
+    computeRank(lastKey, values)
